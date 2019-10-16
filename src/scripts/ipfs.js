@@ -12,12 +12,15 @@
 
 const ipfsClient = require('ipfs-http-client');
 const ipfsCluster = require('ipfs-cluster-api');
-
-const ipfs = ipfsClient({ host: '0.0.0.0', port: '5001'});
-const cluster = ipfsCluster({ host: '127.0.0.1', port: '9094'});
-
+let ipfs, cluster;
+try {
+  ipfs = ipfsClient({ host: '0.0.0.0', port: '5001'});  // 0.0.0.0 indicates listening to other than localhost 
+  cluster = ipfsCluster({ host: '0.0.0.0', port: '9094'}); 
+} catch(err){
+    console.log("Could not connect to specified host(s). Is your IPFS deamon (API and/or Cluster) server running? ")
+}
 cluster.peers.ls((err,res) => {
-    if (err) return
+  if (err) console.log()
   console.log("CLUSTER PEERS: ", res);    
 })
 export { ipfs, cluster }
